@@ -17,4 +17,4 @@ A small app to parse xslx files. This software generates a new xslx that is **fo
 
 ## Other Notes
 
-- There may be bugs, so use at your own risk. I'm not responsible for your taxes.
+- There may be bugs, so use at your own risk. I'm not responsible for your taxes. This will only work for Sport Market Account transactions (no short trades), deposits and withdrawals
