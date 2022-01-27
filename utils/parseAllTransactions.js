@@ -31,27 +31,39 @@ module.exports = JSONsheet => {
 
     Operation === "Deposit" &&
       (currentTrans.receivedCurrency = Coin) &&
-      (currentTrans.receivedAmount = parseFloat(AssetChange));
+      (currentTrans.receivedAmount = AssetChange);
 
     Operation === "Withdrawal" &&
       (currentTrans.sentCurrency = Coin) &&
-      (currentTrans.sentAmount = parseFloat(AssetChange));
+      (currentTrans.sentAmount = AssetChange);
 
     if (Operation === "Transaction") {
       (currentTrans.lastCalculated === "" || currentTrans.lastCalculated === "sell") &&
         (currentTrans.feeCurrency = Coin) &&
-        (currentTrans.feeAmount = parseFloat(AssetChange)) &&
-        (currentTrans.lastCalculated = "fee");
+        (currentTrans.feeAmount += parseFloat(AssetChange));
 
       currentTrans.lastCalculated === "fee" &&
         (currentTrans.receivedCurrency = Coin) &&
-        (currentTrans.receivedAmount = parseFloat(AssetChange)) &&
-        (currentTrans.lastCalculated = "buy");
+        (currentTrans.receivedAmount += parseFloat(AssetChange));
 
       currentTrans.lastCalculated === "buy" &&
         (currentTrans.sentCurrency = Coin) &&
-        (currentTrans.sentAmount = parseFloat(AssetChange)) &&
-        (currentTrans.lastCalculated = "sell");
+        (currentTrans.sentAmount += parseFloat(AssetChange));
+
+      switch (currentTrans.lastCalculated) {
+        case "sell":
+          currentTrans.lastCalculated = "fee";
+          break;
+        case "":
+          currentTrans.lastCalculated = "fee";
+          break;
+        case "fee":
+          currentTrans.lastCalculated = "buy";
+          break;
+        case "buy":
+          currentTrans.lastCalculated = "sell";
+          break;
+      }
     }
 
     index === JSONsheet.length - 1 && insertTrans();
